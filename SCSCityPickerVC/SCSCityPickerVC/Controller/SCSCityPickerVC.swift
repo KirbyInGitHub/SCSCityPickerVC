@@ -55,8 +55,9 @@ class SCSCityPickerVC: UIViewController {
             getedCurrentCityWithName(currentCity)
         }
     }
-    
-    /// 设置热门城市
+    /// 设置热门城市标题
+    var hotTitle:String?
+    /// 设置热门城市,或者其他你想设置的字段
     var hotCities: [String]!
     /// 是否是push的方式显示的,是的话则不显示关闭按钮
     var isPush:Bool = false

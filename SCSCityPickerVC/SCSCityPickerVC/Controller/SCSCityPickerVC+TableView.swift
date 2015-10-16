@@ -261,9 +261,11 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
         itemView2.frame = frame2
         showHistoryCity ? headerView.addSubview(itemView2) : (frame2 = CGRectZero)
         
+        if hotTitle == nil {
+            hotTitle = "热门城市"
+        }
         
-        
-        let itemView3 = SCSHeaderItemView.getHeaderItemView("热门城市")
+        let itemView3 = SCSHeaderItemView.getHeaderItemView(hotTitle!)
         var hotCityModels: [SCSCityModel] = []
         
         if self.hotCityModels != nil {
