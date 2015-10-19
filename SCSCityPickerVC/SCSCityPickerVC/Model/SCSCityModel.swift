@@ -76,6 +76,30 @@ class SCSCityModel: NSObject {
         return cityModels
     }
     
+    /// 从网络加载城市列表
+    ///
+    /// - parameter completion: 返回景点数组
+    class func getSightsWithCity(completion:(sights:[SCSCityModel]?) -> ()) {
+        
+        //以下代码换成自己的网络获取数据的方法
+//        SCSNetworkTools.getSightsWithCity { (json, error) -> () in
+//            
+//            if error != nil || json == nil {
+//                return
+//            }
+//            
+//            var cityModels = [SCSCityModel]()
+//            
+//            for dict in json! {
+//                let cityModel = parse(dict)
+//                cityModels.append(cityModel)
+//            }
+//            
+//            completion(sights: cityModels)
+        
+//        }
+    }
+    
     /// 进行字典转模型
     ///
     /// - parameter dict: 字典

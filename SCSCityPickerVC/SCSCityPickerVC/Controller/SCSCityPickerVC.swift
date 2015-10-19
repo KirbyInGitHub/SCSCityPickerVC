@@ -71,21 +71,11 @@ class SCSCityPickerVC: UIViewController {
     var showHistoryCity = true
     /// 是否需要显示国外城市
     var showForeignCity = true
+    /// 是否加载本地数据
+    var isLoadLocationCity = true
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        
-        if cityModels == nil {
-            
-            let cityModels = SCSCityModel.cityModelsPrepare()
-            self.cityModels = cityModels
-            
-            self.chinaCityModels = cityModels
-            self.foreignCityModels = SCSCityModel.foreignCityModelsPrepare()
-            
-            hotCities = ["北京","上海","广州","成都","杭州","重庆"]
-            
-        }
 
     }
 
@@ -120,6 +110,17 @@ class SCSCityPickerVC: UIViewController {
         //通知处理
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notiAction:", name: CityChoosedNoti, object: nil)
         
+        if self.cityModels == nil && isLoadLocationCity {
+            
+            let cityModels = SCSCityModel.cityModelsPrepare()
+            self.cityModels = cityModels
+            
+            self.chinaCityModels = cityModels
+            self.foreignCityModels = SCSCityModel.foreignCityModelsPrepare()
+            
+            self.hotCities = ["北京","上海","广州","成都","杭州","重庆"]
+            
+        }
         
     }
     
