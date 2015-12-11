@@ -30,7 +30,7 @@ cityVC.showLocation = true
 ```Swift
 let navVC = UINavigationController(rootViewController: cityVC)
 presentViewController(navVC, animated: true, completion: nil)
-``
+```
 <br>  
 1.闭包,选中了城市<br>
 ```Swift
