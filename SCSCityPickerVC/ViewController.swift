@@ -48,7 +48,7 @@ class ViewController: UIViewController,SCSCityPickerVCDelegate {
         
         
         //1.闭包,选中了城市
-        cityVC.selectedCityModel = {[weak self] (cityModel: SCSCityModel) in
+        cityVC.selectedCityModel = {(cityModel: SCSCityModel) in
 
             print(cityModel.name)
 

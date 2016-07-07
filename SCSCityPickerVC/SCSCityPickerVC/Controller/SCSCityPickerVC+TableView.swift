@@ -216,11 +216,11 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
 
         searchRVC.view.alpha = 0
         searchRVC.touchBeganAction = {[weak self] in
-            searchBar.endEditing(true)
+            self?.searchBar.endEditing(true)
         }
         
         searchRVC.tableViewScrollAction = { [weak self] in
-            searchBar.endEditing(true)
+            self?.searchBar.endEditing(true)
         }
         
         searchRVC.tableViewDidSelectedRowAction = {[weak self] (cityModel: SCSCityModel) in

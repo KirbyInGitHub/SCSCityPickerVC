@@ -161,9 +161,7 @@ class LocationManager: NSObject,CLLocationManagerDelegate {
     if NSString(string: UIDevice.currentDevice().systemVersion).doubleValue >= 8 {
       
       //locationManager.requestAlwaysAuthorization() // add in plist NSLocationAlwaysUsageDescription
-      if #available(iOS 8.0, *) {
-          locationManager.requestWhenInUseAuthorization()
-      }
+      locationManager.requestWhenInUseAuthorization()
     }
     
     startLocationManger()
@@ -596,45 +594,32 @@ private class AddressParser: NSObject{
   
   private func getPlacemark() -> CLPlacemark {
     
-    let addressDict = NSMutableDictionary()
+    var addressDict = [String : AnyObject]()
     
-    let formattedAddressArray = self.formattedAddress.componentsSeparatedByString(", ") as Array
+    let formattedAddressArray = self.formattedAddress.componentsSeparatedByString(", ")
     
-    let kSubAdministrativeArea = "SubAdministrativeArea"
-    let kSubLocality           = "SubLocality"
-    let kState                 = "State"
-    let kStreet                = "Street"
-    let kThoroughfare          = "Thoroughfare"
-    let kFormattedAddressLines = "FormattedAddressLines"
-    let kSubThoroughfare       = "SubThoroughfare"
-    let kPostCodeExtension     = "PostCodeExtension"
-    let kCity                  = "City"
-    let kZIP                   = "ZIP"
-    let kCountry               = "Country"
-    let kCountryCode           = "CountryCode"
+    addressDict["SubAdministrativeArea"] = self.subAdministrativeArea
+    addressDict["SubLocality"] = self.subLocality
+    addressDict["State"] = self.administrativeAreaCode
     
-    addressDict.setObject(self.subAdministrativeArea, forKey: kSubAdministrativeArea)
-    addressDict.setObject(self.subLocality, forKey: kSubLocality)
-    addressDict.setObject(self.administrativeAreaCode, forKey: kState)
-    
-    addressDict.setObject(formattedAddressArray.first as! NSString, forKey: kStreet)
-    addressDict.setObject(self.thoroughfare, forKey: kThoroughfare)
-    addressDict.setObject(formattedAddressArray, forKey: kFormattedAddressLines)
-    addressDict.setObject(self.subThoroughfare, forKey: kSubThoroughfare)
-    addressDict.setObject("", forKey: kPostCodeExtension)
-    addressDict.setObject(self.locality, forKey: kCity)
+    addressDict["Street"] = formattedAddressArray.first
+    addressDict["Thoroughfare"] = self.thoroughfare
+    addressDict["FormattedAddressLines"] = formattedAddressArray
+    addressDict["SubThoroughfare"] = self.subThoroughfare
+    addressDict["PostCodeExtension"] = ""
+    addressDict["City"] = self.locality
     
     
-    addressDict.setObject(self.postalCode, forKey: kZIP)
-    addressDict.setObject(self.country, forKey: kCountry)
-    addressDict.setObject(self.ISOcountryCode, forKey: kCountryCode)
+    addressDict["ZIP"] = self.postalCode
+    addressDict["Country"] = self.country
+    addressDict["CountryCode"] = self.ISOcountryCode
     
     
     let lat = self.latitude.doubleValue
     let lng = self.longitude.doubleValue
     let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
     
-    let placemark = MKPlacemark(coordinate: coordinate, addressDictionary: addressDict as? [String : AnyObject])
+    let placemark = MKPlacemark(coordinate: coordinate, addressDictionary: addressDict)
     
     return (placemark as CLPlacemark)
   }

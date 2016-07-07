@@ -108,7 +108,7 @@ class SCSCityPickerVC: UIViewController {
         self.navigationController?.navigationBar.barStyle = UIBarStyle.BlackTranslucent
         
         //通知处理
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notiAction:", name: CityChoosedNoti, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SCSCityPickerVC.notiAction(_:)), name: CityChoosedNoti, object: nil)
         
         if self.cityModels == nil && isLoadLocationCity {
             
@@ -130,7 +130,7 @@ class SCSCityPickerVC: UIViewController {
     func dismissBtnPrepare(){
         
         dismissBtn.setImage(UIImage(named: "Resource.bundle/cancel"), forState: UIControlState.Normal)
-        dismissBtn.addTarget(self, action: "dismiss", forControlEvents: UIControlEvents.TouchUpInside)
+        dismissBtn.addTarget(self, action: #selector(SCSCityPickerVC.dismiss), forControlEvents: UIControlEvents.TouchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissBtn)
     }
     
@@ -159,7 +159,7 @@ class SCSCityPickerVC: UIViewController {
         
         navSegment.selectedSegmentIndex = 0
         
-        navSegment.addTarget(self, action: "selectCountry", forControlEvents: UIControlEvents.ValueChanged)
+        navSegment.addTarget(self, action: #selector(SCSCityPickerVC.selectCountry), forControlEvents: UIControlEvents.ValueChanged)
         
         return navSegment
         }()

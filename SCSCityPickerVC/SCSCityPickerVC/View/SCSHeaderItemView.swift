@@ -72,7 +72,7 @@ class SCSCPContentView: UIView{
             
             let itemBtn = ItemBtn()
             itemBtn.setTitle(cityModel.name, forState: UIControlState.Normal)
-            itemBtn.addTarget(self, action: "btnClick:", forControlEvents: UIControlEvents.TouchUpInside)
+            itemBtn.addTarget(self, action: #selector(SCSCPContentView.btnClick(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             btns.append(itemBtn)
             itemBtn.cityModel = cityModel
             self.addSubview(itemBtn)
