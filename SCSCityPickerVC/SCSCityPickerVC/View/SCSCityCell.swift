@@ -20,13 +20,13 @@ class SCSCityCell: UITableViewCell {
     
     
     
-    class func cityCellInTableView(tableView: UITableView) -> SCSCityCell {
+    class func cityCellInTableView(_ tableView: UITableView) -> SCSCityCell {
         
         //取出cell
-        var cityCell = tableView.dequeueReusableCellWithIdentifier(reuseId) as? SCSCityCell
+        var cityCell = tableView.dequeueReusableCell(withIdentifier: reuseId) as? SCSCityCell
         
         if cityCell == nil {
-            cityCell = SCSCityCell(style: UITableViewCellStyle.Default, reuseIdentifier: reuseId)}
+            cityCell = SCSCityCell(style: UITableViewCellStyle.default, reuseIdentifier: reuseId)}
         
         return cityCell!
     }

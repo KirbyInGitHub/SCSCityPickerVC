@@ -33,14 +33,14 @@ class SCSHeaderItemView: UIView {
     }
     
     func dataCome(){
-        self.msgLabel.hidden = cityModles.count != 0
+        self.msgLabel.isHidden = cityModles.count != 0
         self.contentView.cityModles = cityModles
     }
     
     
-    class func getHeaderItemView(title: String) -> SCSHeaderItemView {
+    class func getHeaderItemView(_ title: String) -> SCSHeaderItemView {
         
-        let itemView = NSBundle.mainBundle().loadNibNamed("SCSHeaderItemView", owner: nil, options: nil).first as! SCSHeaderItemView
+        let itemView = Bundle.main.loadNibNamed("SCSHeaderItemView", owner: nil, options: nil)?.first as! SCSHeaderItemView
         itemView.itemLabel.text = title
         
         return itemView
@@ -71,8 +71,8 @@ class SCSCPContentView: UIView{
         for cityModel in cityModles{
             
             let itemBtn = ItemBtn()
-            itemBtn.setTitle(cityModel.name, forState: UIControlState.Normal)
-            itemBtn.addTarget(self, action: #selector(SCSCPContentView.btnClick(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            itemBtn.setTitle(cityModel.name, for: UIControlState())
+            itemBtn.addTarget(self, action: #selector(SCSCPContentView.btnClick(_:)), for: UIControlEvents.touchUpInside)
             btns.append(itemBtn)
             itemBtn.cityModel = cityModel
             self.addSubview(itemBtn)
@@ -81,9 +81,9 @@ class SCSCPContentView: UIView{
     
     
     /** 按钮点击事件 */
-    func btnClick(btn: ItemBtn){
+    func btnClick(_ btn: ItemBtn){
         
-        NSNotificationCenter.defaultCenter().postNotificationName(CityChoosedNoti, object: nil, userInfo: ["citiModel":btn.cityModel])
+        NotificationCenter.default.post(name: Notification.Name(rawValue: CityChoosedNoti), object: nil, userInfo: ["citiModel":btn.cityModel])
     }
     
     
@@ -94,12 +94,12 @@ class SCSCPContentView: UIView{
         if btns.count == 0 {return}
         let marginForRow: CGFloat = 13
         let marginForCol: CGFloat = 13
-        let width: CGFloat = (UIScreen.mainScreen().bounds.size.width - 24 - (CGFloat(maxRowCount - 1)) * marginForRow) / CGFloat(maxRowCount)
+        let width: CGFloat = (UIScreen.main.bounds.size.width - 24 - (CGFloat(maxRowCount - 1)) * marginForRow) / CGFloat(maxRowCount)
         
-        let leftX = (UIScreen.mainScreen().bounds.size.width - 24 - (CGFloat(maxRowCount) - 1) * marginForRow - width * CGFloat(maxRowCount)) * 0.5
+        let leftX = (UIScreen.main.bounds.size.width - 24 - (CGFloat(maxRowCount) - 1) * marginForRow - width * CGFloat(maxRowCount)) * 0.5
         
         let height: CGFloat = 30
-        for (index,btn) in btns.enumerate() {
+        for (index,btn) in btns.enumerated() {
             
             let row = index % maxRowCount
             
@@ -108,7 +108,7 @@ class SCSCPContentView: UIView{
             let x = (width + marginForRow) * CGFloat(row) + leftX
             let y = (height + marginForCol) * CGFloat(col)
             
-            btn.frame = CGRectMake(x, y, width, height)
+            btn.frame = CGRect(x: x, y: y, width: width, height: height)
         }
     }
     
@@ -135,9 +135,9 @@ class ItemBtn: UIButton {
     /** 视图准备 */
     func viewPrepare(){
         
-        self.setTitleColor(SCSCityPickerVC.rgba(31, g: 31, b: 31, a: 1), forState: UIControlState.Normal)
-        self.setTitleColor(SCSCityPickerVC.rgba(141, g: 141, b: 141, a: 1), forState: UIControlState.Highlighted)
-        self.titleLabel?.font = UIFont.systemFontOfSize(15)
+        self.setTitleColor(SCSCityPickerVC.rgba(31, g: 31, b: 31, a: 1), for: UIControlState())
+        self.setTitleColor(SCSCityPickerVC.rgba(141, g: 141, b: 141, a: 1), for: UIControlState.highlighted)
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         self.layer.cornerRadius = 4
         self.layer.masksToBounds = true
         self.backgroundColor = SCSCityPickerVC.rgba(241, g: 241, b: 241, a: 1)

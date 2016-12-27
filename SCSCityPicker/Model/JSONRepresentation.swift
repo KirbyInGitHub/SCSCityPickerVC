@@ -10,7 +10,7 @@ import Foundation
 
 protocol JSONRepresentation {
     
-    mutating func fromJSON(jsonObject: AnyObject?) -> Bool
+    mutating func fromJSON(_ jsonObject: AnyObject?) -> Bool
     
     func toJSON() -> AnyObject
     
@@ -41,7 +41,7 @@ extension Array where Element: JSONRepresentation  {
         return self.map { $0.toJSON() }
     }
     
-    internal mutating func fromJSON(jsonObject: AnyObject?) -> Bool  {
+    internal mutating func fromJSON(_ jsonObject: AnyObject?) -> Bool  {
         
         if let reval = Array<Element>(jsonObject: jsonObject) {
             self = reval

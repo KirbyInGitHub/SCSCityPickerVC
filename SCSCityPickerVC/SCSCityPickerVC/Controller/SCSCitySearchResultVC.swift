@@ -12,7 +12,7 @@ class SCSCitySearchResultVC: UIViewController,UITableViewDataSource,UITableViewD
     
     var touchBeganAction: (()->())!
     var tableViewScrollAction: (()->())!
-    var tableViewDidSelectedRowAction: ((cityModel: SCSCityModel)->())!
+    var tableViewDidSelectedRowAction: ((_ cityModel: SCSCityModel)->())!
     
     
     @IBOutlet weak var tableView: UITableView!
@@ -39,7 +39,7 @@ class SCSCitySearchResultVC: UIViewController,UITableViewDataSource,UITableViewD
     }
     
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if cityModels == nil {return 0}
         
@@ -48,7 +48,7 @@ class SCSCitySearchResultVC: UIViewController,UITableViewDataSource,UITableViewD
         return cityModels.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = SCSCityCell.cityCellInTableView(tableView)
         
@@ -57,31 +57,31 @@ class SCSCitySearchResultVC: UIViewController,UITableViewDataSource,UITableViewD
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        tableViewDidSelectedRowAction?(cityModel: cityModels[indexPath.row])
+        tableViewDidSelectedRowAction?(cityModels[indexPath.row])
     }
     
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if self.cityModels == nil {return nil}
         return "共检索到\(self.cityModels.count)到记录"
     }
     
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchBeganAction?()
     }
     
     func dataPrepare(){
         
-        self.tableView.hidden = self.cityModels == nil
+        self.tableView.isHidden = self.cityModels == nil
         
         
         self.tableView.reloadData()
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         tableViewScrollAction?()
     }
 

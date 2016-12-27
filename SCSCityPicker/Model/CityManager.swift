@@ -17,22 +17,22 @@ public enum CityType {
 
 extension CityType {
     
-    private var chinaCitys: [City]? {
-        guard let bundleUrl = NSBundle.mainBundle().pathForResource("Resource", ofType: "bundle"),
-            let plistUrl = NSBundle(path: bundleUrl)?.URLForResource("chinaCity", withExtension: "plist") else {
+    fileprivate var chinaCitys: [City]? {
+        guard let bundleUrl = Bundle.main.path(forResource: "Resource", ofType: "bundle"),
+            let plistUrl = Bundle(path: bundleUrl)?.url(forResource: "chinaCity", withExtension: "plist") else {
             return nil
         }
-        let plistArray = NSArray(contentsOfURL: plistUrl)
+        let plistArray = NSArray(contentsOf: plistUrl)
         
         return [City](jsonObject: plistArray)
     }
     
-    private var foreignCitys: [City]? {
-        guard let bundleUrl = NSBundle.mainBundle().pathForResource("Resource", ofType: "bundle"),
-            let plistUrl = NSBundle(path: bundleUrl)?.URLForResource("foreignCity", withExtension: "plist") else {
+    fileprivate var foreignCitys: [City]? {
+        guard let bundleUrl = Bundle.main.path(forResource: "Resource", ofType: "bundle"),
+            let plistUrl = Bundle(path: bundleUrl)?.url(forResource: "foreignCity", withExtension: "plist") else {
                 return nil
         }
-        let plistArray = NSArray(contentsOfURL: plistUrl)
+        let plistArray = NSArray(contentsOf: plistUrl)
         
         return [City](jsonObject: plistArray)
     }
@@ -80,8 +80,8 @@ public struct CityManager {
                     destinationCitys.append(city)
                     
                 } else {
-                    if city.name?.containsString(name.lowercaseString) == true ||
-                        city.spell?.lowercaseString.containsString(name.lowercaseString) == true {
+                    if city.name?.contains(name.lowercased()) == true ||
+                        city.spell?.lowercased().contains(name.lowercased()) == true {
                         destinationCitys.append(city)
                     }
                 }

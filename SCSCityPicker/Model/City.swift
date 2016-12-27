@@ -21,7 +21,7 @@ public struct City {
 
 extension City: JSONRepresentation {
     
-    public mutating func fromJSON(jsonObject: AnyObject?) -> Bool {
+    public mutating func fromJSON(_ jsonObject: AnyObject?) -> Bool {
         guard let dict = jsonObject as? [String: AnyObject] else { return false }
 
         id = dict["id"] as? String
@@ -38,15 +38,15 @@ extension City: JSONRepresentation {
     public func toJSON() -> AnyObject {
         
         var dict = [String: AnyObject]()
-        dict["id"] = id
-        dict["pid"] = pid
-        dict["name"] = name
-        dict["spell"] = spell
-        dict["gps1"] = gps1
-        dict["gps2"] = gps2
-        dict["children"] = children?.toJSON()
+        dict["id"] = id as AnyObject?
+        dict["pid"] = pid as AnyObject?
+        dict["name"] = name as AnyObject?
+        dict["spell"] = spell as AnyObject?
+        dict["gps1"] = gps1 as AnyObject?
+        dict["gps2"] = gps2 as AnyObject?
+        dict["children"] = children?.toJSON() as AnyObject?
         
-        return dict
+        return dict as AnyObject
     }
 }
 
@@ -55,8 +55,10 @@ extension City {
     /** 首字母获取 */
     public var firstUpperLetter: String? {
         
-        guard let spell = self.spell where spell.characters.count >= 1 else { return nil }
+        guard let spell = self.spell, spell.characters.count >= 1 else { return nil }
         
-        return spell.substringToIndex(spell.startIndex.advancedBy(1)).uppercaseString
+        return nil
+        
+//        return spell.substringToIndex(spell.characters.index(spell.startIndex, offsetBy: 1)).uppercased()
     }
 }

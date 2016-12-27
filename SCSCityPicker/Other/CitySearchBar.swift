@@ -13,8 +13,8 @@ class CitySearchBar: UISearchBar,UISearchBarDelegate {
     var searchBarShouldBeginEditing: (()->())?
     var searchBarDidEndditing: (()->())?
     
-    var searchAction: ((searchText: String)->Void)?
-    var searchTextDidChangedAction: ((searchText: String)->Void)?
+    var searchAction: ((_ searchText: String)->Void)?
+    var searchTextDidChangedAction: ((_ searchText: String)->Void)?
     var searchBarCancelAction: (()->())?
     
     
@@ -33,44 +33,44 @@ class CitySearchBar: UISearchBar,UISearchBarDelegate {
     /// 准备视图
     func viewPrepare(){
         
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
         self.backgroundImage = UIImage()
-        self.layer.borderColor = UIColor.grayColor().CGColor
+        self.layer.borderColor = UIColor.gray.cgColor
         self.layer.borderWidth = 0.5
         self.layer.cornerRadius = 4
         self.layer.masksToBounds = true
         self.placeholder = "输入城市名、拼音或者首字母查询"
-        self.tintColor = UIColor.grayColor()
+        self.tintColor = UIColor.gray
         
         self.delegate = self
     }
     
     
-    func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         searchBar.setShowsCancelButton(true, animated: true)
         searchBarShouldBeginEditing?()
         return true
     }
     
-    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         
         searchBarDidEndditing?()
         searchBar.setShowsCancelButton(false, animated: true)
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
         searchBarCancelAction?()
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        searchAction?(searchText: searchBar.text!)
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchAction?(searchBar.text!)
         searchBar.endEditing(true)
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        searchTextDidChangedAction?(searchText: searchText)
+        searchTextDidChangedAction?(searchText)
     }
 
 

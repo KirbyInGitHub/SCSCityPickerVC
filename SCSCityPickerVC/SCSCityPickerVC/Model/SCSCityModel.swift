@@ -20,7 +20,7 @@ class SCSCityModel: NSObject {
     
     /** 首字母获取 */
     var getFirstUpperLetter: String {
-        return (self.spell as NSString).substringToIndex(1).uppercaseString
+        return (self.spell as NSString).substring(to: 1).uppercased()
     }
     
     init(id: String, pid: String, name: String, spell: String, gps1: String, gps2:String ){
@@ -40,10 +40,10 @@ class SCSCityModel: NSObject {
         
         //加载plist，你也可以加载网络数据
         
-        let bundleUrl = NSBundle.mainBundle().pathForResource("Resource", ofType: "bundle")
-        let plistUrl = NSBundle(path: bundleUrl!)?.URLForResource("chinaCity", withExtension: "plist")!
+        let bundleUrl = Bundle.main.path(forResource: "Resource", ofType: "bundle")
+        let plistUrl = Bundle(path: bundleUrl!)?.url(forResource: "chinaCity", withExtension: "plist")!
 //        let plistUrl = NSBundle.mainBundle().URLForResource("Resource.bundle/chinaCity", withExtension: "plist")!
-        let cityArray = NSArray(contentsOfURL: plistUrl!) as! [NSDictionary]
+        let cityArray = NSArray(contentsOf: plistUrl!) as! [NSDictionary]
         
         var cityModels = [SCSCityModel]()
         
@@ -61,10 +61,10 @@ class SCSCityModel: NSObject {
     class func foreignCityModelsPrepare() -> [SCSCityModel] {
         
         //加载plist，你也可以加载网络数据
-        let bundleUrl = NSBundle.mainBundle().pathForResource("Resource", ofType: "bundle")
-        let plistUrl = NSBundle(path: bundleUrl!)?.URLForResource("foreignCity", withExtension: "plist")!
+        let bundleUrl = Bundle.main.path(forResource: "Resource", ofType: "bundle")
+        let plistUrl = Bundle(path: bundleUrl!)?.url(forResource: "foreignCity", withExtension: "plist")!
 //        let plistUrl = NSBundle.mainBundle().URLForResource("Resource.bundle/foreignCity", withExtension: "plist")!
-        let cityArray = NSArray(contentsOfURL: plistUrl!) as! [NSDictionary]
+        let cityArray = NSArray(contentsOf: plistUrl!) as! [NSDictionary]
         
         var cityModels = [SCSCityModel]()
         
@@ -79,7 +79,7 @@ class SCSCityModel: NSObject {
     /// 从网络加载城市列表
     ///
     /// - parameter completion: 返回景点数组
-    class func getSightsWithCity(completion:(sights:[SCSCityModel]?) -> ()) {
+    class func getSightsWithCity(_ completion:(_ sights:[SCSCityModel]?) -> ()) {
         
         //以下代码换成自己的网络获取数据的方法
 //        SCSNetworkTools.getSightsWithCity { (json, error) -> () in
@@ -105,7 +105,7 @@ class SCSCityModel: NSObject {
     /// - parameter dict: 字典
     ///
     /// - returns: 返回城市模型
-    class func parse(dict: NSDictionary) -> SCSCityModel {
+    class func parse(_ dict: NSDictionary) -> SCSCityModel {
         
         let id = dict["id"] as! String
         let pid = dict["pid"] as! String
@@ -144,7 +144,7 @@ class SCSCityModel: NSObject {
     /// - parameter isFuzzy:    是否是精确搜索
     ///
     /// - returns: 返回搜索的结果城市数组
-    class func findCityModelWithCityName(cityNames: [String]?, cityModels: [SCSCityModel], isFuzzy: Bool) -> [SCSCityModel]? {
+    class func findCityModelWithCityName(_ cityNames: [String]?, cityModels: [SCSCityModel], isFuzzy: Bool) -> [SCSCityModel]? {
         
         if cityNames == nil {return nil}
         
@@ -166,9 +166,9 @@ class SCSCityModel: NSObject {
                         
                     }else{//模糊搜索
                         
-                        let checkName = (name as NSString).lowercaseString
+                        let checkName = (name as NSString).lowercased
                         
-                        if (cityModel2.name as NSString).rangeOfString(name).length > 0 || ((cityModel2.spell as NSString).lowercaseString as NSString).rangeOfString(checkName).length > 0{
+                        if (cityModel2.name as NSString).range(of: name).length > 0 || ((cityModel2.spell as NSString).lowercased as NSString).range(of: checkName).length > 0{
                             destinationModels.append(cityModel2)
                             
                         }
@@ -187,7 +187,7 @@ class SCSCityModel: NSObject {
     /// - parameter cities:    城市模型
     ///
     /// - returns: 返回搜索后的城市模型数组
-    class func searchCityModelsWithCondition(condition: String, cities: [SCSCityModel]) -> [SCSCityModel]?{
+    class func searchCityModelsWithCondition(_ condition: String, cities: [SCSCityModel]) -> [SCSCityModel]?{
         
         return findCityModelWithCityName([condition], cityModels: cities, isFuzzy: true)
     }

@@ -20,7 +20,7 @@ class ViewController: UIViewController,SCSCityPickerVCDelegate {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func city(sender: UIButton) {
+    @IBAction func city(_ sender: UIButton) {
         
         let cityVC = SCSCityPickerVC()
         
@@ -44,7 +44,7 @@ class ViewController: UIViewController,SCSCityPickerVCDelegate {
         
         
         let navVC = UINavigationController(rootViewController: cityVC)
-        presentViewController(navVC, animated: true, completion: nil)
+        present(navVC, animated: true, completion: nil)
         
         
         //1.闭包,选中了城市
@@ -61,7 +61,7 @@ class ViewController: UIViewController,SCSCityPickerVCDelegate {
     }
     
     /// 代理方式
-    func selectedCityModel(cityPicker: SCSCityPickerVC, cityModel: SCSCityModel) {
+    func selectedCityModel(_ cityPicker: SCSCityPickerVC, cityModel: SCSCityModel) {
         
         print(cityModel.id)
     }

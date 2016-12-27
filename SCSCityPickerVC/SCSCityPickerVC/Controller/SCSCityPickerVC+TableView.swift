@@ -13,23 +13,23 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
     
     var searchH: CGFloat {return 60}
     
-    private var currentCityModel: SCSCityModel? {
+    fileprivate var currentCityModel: SCSCityModel? {
         if self.currentCity == nil {return nil}
         return SCSCityModel.findCityModelWithCityName([currentCity], cityModels: cityModels!, isFuzzy: false)?.first
     }
     
-    private var hotCityModels: [SCSCityModel]? {
+    fileprivate var hotCityModels: [SCSCityModel]? {
         if self.hotCities==nil {return nil}
         return SCSCityModel.findCityModelWithCityName(hotCities, cityModels: cityModels!, isFuzzy: false)
     }
     
-    private var historyModels: [SCSCityModel]? {
+    fileprivate var historyModels: [SCSCityModel]? {
         if self.selectedCityArray.count == 0 {return nil}
         return SCSCityModel.findCityModelWithCityName(self.selectedCityArray, cityModels: self.cityModels!, isFuzzy: false)
     }
     
-    private var headViewWith: CGFloat{
-        return UIScreen.mainScreen().bounds.width - 10
+    fileprivate var headViewWith: CGFloat{
+        return UIScreen.main.bounds.width - 10
     }
     
 //    private var headerViewH: CGFloat{
@@ -41,7 +41,7 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
 //        return h0+h1+h2+h3
 //    }
     
-    private var headerViewHight:CGFloat {
+    fileprivate var headerViewHight:CGFloat {
         
         var h:CGFloat = 0
         if showSearchBar { h = 80 }
@@ -66,19 +66,19 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
         return h
     }
     
-    private var sortedCityModles: [SCSCityModel] {
+    fileprivate var sortedCityModles: [SCSCityModel] {
         
-        return cityModels!.sort( {  (m1, m2) -> Bool in
+        return cityModels!.sorted( by: {  (m1, m2) -> Bool in
             m1.getFirstUpperLetter < m2.getFirstUpperLetter
             })
     }
     
     
     /** 计算高度 */
-    private func headItemViewH(count: Int) -> CGRect{
+    fileprivate func headItemViewH(_ count: Int) -> CGRect{
         
         let height: CGFloat = count <= 4 ? 96 : 140
-        return CGRectMake(0, 0, headViewWith, height)
+        return CGRect(x: 0, y: 0, width: headViewWith, height: height)
     }
     
     
@@ -94,14 +94,14 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
         tableView.delegate = self
         
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[tableView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["tableView": tableView]))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[tableView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["tableView": tableView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[tableView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["tableView": tableView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[tableView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["tableView": tableView]))
         
 
     }
     
     
-    func notiAction(noti: NSNotification){
+    func notiAction(_ noti: Notification){
         
         let userInfo = noti.userInfo as! [String: SCSCityModel]
         let cityModel = userInfo["citiModel"]!
@@ -130,7 +130,7 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
                 
                 if error != nil {return}
                 if placemark == nil {return}
-                let city: NSString = (placemark!.locality! as NSString).stringByReplacingOccurrencesOfString("市", withString: "")
+                let city: NSString = (placemark!.locality! as NSString).replacingOccurrences(of: "市", with: "") as NSString
                 self?.currentCity = city as String
                 
                 })
@@ -143,13 +143,13 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
     /** headerView */
     func headerviewPrepare(){
         
-                let headerView = UIView(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.width, headerViewHight))
+                let headerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: headerViewHight))
         
 //        let headerView = UIView()
         print(headerViewHight)
         //搜索框
-        searchBar = SCSCitySearchBar(frame: CGRectMake(18, 10, UIScreen.mainScreen().bounds.width - 38, 36))
-        showSearchBar ? headerView.addSubview(searchBar) : (searchBar.frame = CGRectZero)
+        searchBar = SCSCitySearchBar(frame: CGRect(x: 18, y: 10, width: UIScreen.main.bounds.width - 38, height: 36))
+        showSearchBar ? headerView.addSubview(searchBar) : (searchBar.frame = CGRect.zero)
 
         
         searchBar.searchAction = { (searchText: String) -> Void in
@@ -165,7 +165,7 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
             
             self?.searchRVC.cityModels = nil
             
-            UIView.animateWithDuration(0.15, animations: {[weak self] () -> Void in
+            UIView.animate(withDuration: 0.15, animations: {[weak self] () -> Void in
                 self?.searchRVC.view.alpha = 1
                 })
         }
@@ -180,7 +180,7 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
             
             self?.navigationController?.setNavigationBarHidden(false, animated: true)
             
-            UIView.animateWithDuration(0.14, animations: {[weak self] () -> Void in
+            UIView.animate(withDuration: 0.14, animations: {[weak self] () -> Void in
                 self?.searchRVC.view.alpha = 0
                 })
         }
@@ -202,17 +202,17 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
         }
         
         //加载搜索结果列表
-        searchRVC = SCSCitySearchResultVC(nibName: "SCSCitySearchResultVC", bundle: NSBundle.mainBundle())
+        searchRVC = SCSCitySearchResultVC(nibName: "SCSCitySearchResultVC", bundle: Bundle.main)
         
         print(searchRVC.view)
         addChildViewController(searchRVC)
         
         view.addSubview(searchRVC.view)
-        view.bringSubviewToFront(searchRVC.view)
+        view.bringSubview(toFront: searchRVC.view)
         
         searchRVC.view.translatesAutoresizingMaskIntoConstraints = false
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[maskView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["maskView": searchRVC.view]))
-        view.addConstraints( NSLayoutConstraint.constraintsWithVisualFormat("V:|-80-[maskView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["maskView": searchRVC.view]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[maskView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["maskView": searchRVC.view]))
+        view.addConstraints( NSLayoutConstraint.constraints(withVisualFormat: "V:|-80-[maskView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["maskView": searchRVC.view]))
 
         searchRVC.view.alpha = 0
         searchRVC.touchBeganAction = {[weak self] in
@@ -238,10 +238,10 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
         }
         
         itemView.cityModles = currentCities
-        let y1 = showSearchBar ? CGRectGetMaxY(searchBar.frame) + 20 : CGRectGetMaxY(searchBar.frame)
-        var frame1 = CGRectMake(0, y1, UIScreen.mainScreen().bounds.width, 90)
+        let y1 = showSearchBar ? searchBar.frame.maxY + 20 : searchBar.frame.maxY
+        var frame1 = CGRect(x: 0, y: y1, width: UIScreen.main.bounds.width, height: 90)
         itemView.frame = frame1
-        showLocation ? headerView.addSubview(itemView) : (frame1 = CGRectZero)
+        showLocation ? headerView.addSubview(itemView) : (frame1 = CGRect.zero)
         
         
         
@@ -251,15 +251,15 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
         itemView2.cityModles = historyCityModels
         var y2:CGFloat = 0
         if !showLocation {
-            y2 = CGRectGetMaxY(searchBar.frame)
+            y2 = searchBar.frame.maxY
         }
         if showLocation {
-            y2 = CGRectGetMaxY(frame1)
+            y2 = frame1.maxY
         }
-        var frame2 = CGRectMake(0, y2, UIScreen.mainScreen().bounds.width, 140)
+        var frame2 = CGRect(x: 0, y: y2, width: UIScreen.main.bounds.width, height: 140)
 
         itemView2.frame = frame2
-        showHistoryCity ? headerView.addSubview(itemView2) : (frame2 = CGRectZero)
+        showHistoryCity ? headerView.addSubview(itemView2) : (frame2 = CGRect.zero)
         
         if hotTitle == nil {
             hotTitle = "热门城市"
@@ -277,20 +277,20 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
         var y3:CGFloat = 0
 
         if !showHistoryCity && showLocation {
-            y3 = CGRectGetMaxY(frame1)
+            y3 = frame1.maxY
         }
         
         if !showHistoryCity && !showLocation && showSearchBar {
-            y3 = CGRectGetMaxY(searchBar.frame)
+            y3 = searchBar.frame.maxY
         }
         
         if showHistoryCity  {
-            y3 = CGRectGetMaxY(frame2)
+            y3 = frame2.maxY
         }
 
-        var frame3 = CGRectMake(0, y3, UIScreen.mainScreen().bounds.width, 140)
+        var frame3 = CGRect(x: 0, y: y3, width: UIScreen.main.bounds.width, height: 140)
         itemView3.frame = frame3
-        showHotCity ?  headerView.addSubview(itemView3) : (frame3 = CGRectZero)
+        showHotCity ?  headerView.addSubview(itemView3) : (frame3 = CGRect.zero)
         
         
         tableView.tableHeaderView = headerView
@@ -298,7 +298,7 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
     
     
     /**  定位到具体的城市了  */
-    func getedCurrentCityWithName(currentCityName: String){
+    func getedCurrentCityWithName(_ currentCityName: String){
         
         if self.currentCityModel == nil {return}
         if currentCityItemView?.cityModles.count != 0 {return}
@@ -312,18 +312,18 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
         
         indexTitleLabel.backgroundColor = SCSCityPickerVC.rgba(0, g: 0, b: 0, a: 0.4)
         indexTitleLabel.center = self.view.center
-        indexTitleLabel.bounds = CGRectMake(0, 0, 120, 100)
-        indexTitleLabel.font = UIFont.boldSystemFontOfSize(80)
-        indexTitleLabel.textAlignment = NSTextAlignment.Center
-        indexTitleLabel.textColor = UIColor.whiteColor()
+        indexTitleLabel.bounds = CGRect(x: 0, y: 0, width: 120, height: 100)
+        indexTitleLabel.font = UIFont.boldSystemFont(ofSize: 80)
+        indexTitleLabel.textAlignment = NSTextAlignment.center
+        indexTitleLabel.textColor = UIColor.white
     }
     
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return sortedCityModles.count
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         let children = sortedCityModles[section].children
         
@@ -331,13 +331,13 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
     }
     
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
         return sortedCityModles[section].name
         
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = SCSCityCell.cityCellInTableView(tableView)
         
@@ -346,36 +346,36 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
         
         let cityModel = sortedCityModles[indexPath.section].children![indexPath.row]
         citySelected(cityModel)
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         return 44
     }
     
-    func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return indexHandle()
     }
     
-    func tableView(tableView: UITableView, sectionForSectionIndexTitle title: String, atIndex index: Int) -> Int {
+    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
         
         showIndexTitle(title)
         
         self.showTime = 1
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,Int64(0.2 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {[unowned self] () -> Void in
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.2 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {[unowned self] () -> Void in
             
             self.showTime = 0.8
             
             })
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,Int64(0.4 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {[unowned self] () -> Void in
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.4 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {[unowned self] () -> Void in
             
             if self.showTime == 0.8 {
                 
@@ -383,7 +383,7 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
             }
             })
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,Int64(0.6 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {[unowned self] () -> Void in
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.6 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {[unowned self] () -> Void in
             
             
             if self.showTime == 0.6 {
@@ -392,7 +392,7 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
             }
             })
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,Int64(0.8 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {[unowned self] () -> Void in
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.8 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {[unowned self] () -> Void in
             
             
             if self.showTime == 0.4 {
@@ -401,7 +401,7 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
             }
             })
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,Int64(1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {[unowned self] () -> Void in
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(1 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {[unowned self] () -> Void in
             
             if self.showTime == 0.2 {
                 
@@ -414,41 +414,41 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
         return indexTitleIndexArray[index]
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         searchBar.endEditing(true)
     }
     
-    func showIndexTitle(indexTitle: String){
+    func showIndexTitle(_ indexTitle: String){
         
-        self.dismissBtn.enabled = false
-        self.view.userInteractionEnabled = false
+        self.dismissBtn.isEnabled = false
+        self.view.isUserInteractionEnabled = false
         indexTitleLabel.text = indexTitle
         self.view.addSubview(indexTitleLabel)
         
     }
     
     func dismissIndexTitle(){
-        self.dismissBtn.enabled = true
-        self.view.userInteractionEnabled = true
+        self.dismissBtn.isEnabled = true
+        self.view.isUserInteractionEnabled = true
         indexTitleLabel.removeFromSuperview()
     }
     
     
     /** 选中城市处理 */
-    func citySelected(cityModel: SCSCityModel){
+    func citySelected(_ cityModel: SCSCityModel){
         
-        if let cityIndex = self.selectedCityArray.indexOf(cityModel.name) {
-            self.selectedCityArray.removeAtIndex(cityIndex)
+        if let cityIndex = self.selectedCityArray.index(of: cityModel.name) {
+            self.selectedCityArray.remove(at: cityIndex)
             
         }else{
             if self.selectedCityArray.count >= 8 {self.selectedCityArray.removeLast()}
         }
         
-        self.selectedCityArray.insert(cityModel.name, atIndex: 0)
+        self.selectedCityArray.insert(cityModel.name, at: 0)
         
-        NSUserDefaults.standardUserDefaults().setObject(self.selectedCityArray, forKey: SelectedCityKey)
+        UserDefaults.standard.set(self.selectedCityArray, forKey: SelectedCityKey)
         
-        selectedCityModel?(cityModel: cityModel)
+        selectedCityModel?(cityModel)
         
         delegate?.selectedCityModel(self, cityModel: cityModel)
         self.dismiss()
@@ -461,7 +461,7 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
         
         var indexArr: [String] = []
         
-        for (index,cityModel) in sortedCityModles.enumerate() {
+        for (index,cityModel) in sortedCityModles.enumerated() {
             let indexString = cityModel.getFirstUpperLetter
             
             if indexArr.contains(indexString) {continue}
@@ -474,7 +474,7 @@ extension SCSCityPickerVC: UITableViewDataSource,UITableViewDelegate {
         return indexArr
     }
     
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
         
         indexTitleLabel.center = self.view.center
     }

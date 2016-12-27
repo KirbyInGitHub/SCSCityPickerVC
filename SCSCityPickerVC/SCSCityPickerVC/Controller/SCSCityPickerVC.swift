@@ -16,12 +16,12 @@ let SelectedCityKey = "SelectedCityKey"
 
 protocol SCSCityPickerVCDelegate : NSObjectProtocol {
     
-    func selectedCityModel(cityPicker: SCSCityPickerVC, cityModel:SCSCityModel)
+    func selectedCityModel(_ cityPicker: SCSCityPickerVC, cityModel:SCSCityModel)
 }
 
 class SCSCityPickerVC: UIViewController {
     
-    static let cityPVCTintColor = UIColor.grayColor()
+    static let cityPVCTintColor = UIColor.gray
     
     weak var delegate: SCSCityPickerVCDelegate!
     /// 默认城市模型
@@ -45,10 +45,10 @@ class SCSCityPickerVC: UIViewController {
     
     var indexTitleIndexArray: [Int] = []
     
-    var selectedCityModel :((cityModel: SCSCityModel) -> Void)?
+    var selectedCityModel :((_ cityModel: SCSCityModel) -> Void)?
     
     /// 关闭按钮
-    lazy var dismissBtn: UIButton = { UIButton(frame: CGRectMake(0, 0, 24, 24)) }()
+    lazy var dismissBtn: UIButton = { UIButton(frame: CGRect(x: 0, y: 0, width: 24, height: 24)) }()
     /// 可以设置当前城市
     var currentCity: String! {
         didSet {
@@ -74,7 +74,7 @@ class SCSCityPickerVC: UIViewController {
     /// 是否加载本地数据
     var isLoadLocationCity = true
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
 
     }
@@ -104,11 +104,11 @@ class SCSCityPickerVC: UIViewController {
         showLocation ? locationPrepare() : ()
         
         showForeignCity ? self.navigationItem.titleView = navSegment : ()
-        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
-        self.navigationController?.navigationBar.barStyle = UIBarStyle.BlackTranslucent
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.barStyle = UIBarStyle.blackTranslucent
         
         //通知处理
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SCSCityPickerVC.notiAction(_:)), name: CityChoosedNoti, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SCSCityPickerVC.notiAction(_:)), name: NSNotification.Name(rawValue: CityChoosedNoti), object: nil)
         
         if self.cityModels == nil && isLoadLocationCity {
             
@@ -129,16 +129,16 @@ class SCSCityPickerVC: UIViewController {
     /// 准备关闭按钮
     func dismissBtnPrepare(){
         
-        dismissBtn.setImage(UIImage(named: "Resource.bundle/cancel"), forState: UIControlState.Normal)
-        dismissBtn.addTarget(self, action: #selector(SCSCityPickerVC.dismiss), forControlEvents: UIControlEvents.TouchUpInside)
+        dismissBtn.setImage(UIImage(named: "Resource.bundle/cancel"), for: UIControlState())
+//        dismissBtn.addTarget(self, action: #selector(SCSCityPickerVC.dismiss), for: UIControlEvents.touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissBtn)
     }
     
     /// 关闭控制器
     func dismiss(){
         
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        NotificationCenter.default.removeObserver(self)
+        self.dismiss(animated: true, completion: nil)
     }
     
     /// 选择国内外数据
@@ -159,24 +159,24 @@ class SCSCityPickerVC: UIViewController {
         
         navSegment.selectedSegmentIndex = 0
         
-        navSegment.addTarget(self, action: #selector(SCSCityPickerVC.selectCountry), forControlEvents: UIControlEvents.ValueChanged)
+        navSegment.addTarget(self, action: #selector(SCSCityPickerVC.selectCountry), for: UIControlEvents.valueChanged)
         
         return navSegment
         }()
     
     lazy var selectedCityArray: [String] = {
-        NSUserDefaults.standardUserDefaults().objectForKey(SelectedCityKey) as? [String] ?? []
+        UserDefaults.standard.object(forKey: SelectedCityKey) as? [String] ?? []
         
         }()
     
-    class func rgba(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) -> UIColor{
+    class func rgba(_ r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) -> UIColor{
         
         return UIColor(red: r/255.0, green: g/255.0, blue: b/255.0, alpha: a)
     }
     
     
     deinit{
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
         print("控制器安全释放")
     }
     
